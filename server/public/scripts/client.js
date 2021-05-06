@@ -12,14 +12,14 @@ function addClickHandlers() {
   $('#bookShelf').on('click', ".isRead", updateBook);
 }
 
-function updateBook(isRead, bookid) {
-  
+function updateBook(event) {
+  const bookid = $(event.target).data("bookid");
+
   $.ajax({
     method: "PUT",
     url: `/books/${bookid}/isRead`,
-    data: isRead
+    data: {isRead: true}
   }).then(function(response) {
-    $('.isRead').text("Read it");
     refreshBooks();
   }).catch(function(error) {
     console.log('Error marking as read', error);
@@ -88,10 +88,14 @@ function renderBooks(books) {
   $("#bookShelf").empty();
   for (let i = 0; i < books.length; i += 1) {
     let book = books[i];
+    let read = 'Mark as read';
+    if (book.isRead == true) {
+      read = 'Read it!';
+    } 
     // For each book, append a new row to our table
     $("#bookShelf").append(`
       <tr>
-        <td><button data-bookid=${book.id} class="isRead">Mark as read</button></td>
+        <td><button data-bookid=${book.id} class="isRead">${read}</button></td>
         <td>${book.title}</td>
         <td>${book.author}</td>
         <td><button class="delete" data-bookid=${book.id}>Delete</button></td>

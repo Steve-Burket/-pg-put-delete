@@ -43,13 +43,15 @@ router.post("/", (req, res) => {
 // Request body must include the content to update - the status
 router.put("/:bookid/isRead", (req, res) => {
   const bookid = req.params.bookid;
-  const isRead = req.body.isRead;
+  const isRead = (req.body.isRead === 'true'); // this is checking and converting it to a true boolean
   let queryText = "";
-
+  console.log(req.body);
+  
   if (isRead == true) {
-    queryText = 'UPDATE "books" SET "isRead"="true" WHERE id=$1 RETURNING *;';
-    res.status(201).send("Book is marked as read");
+    queryText = 'UPDATE "books" SET "isRead"=true WHERE id=$1 RETURNING *;';
   }
+  console.log(isRead);
+  
 
   console.log(bookid, isRead);
   pool
